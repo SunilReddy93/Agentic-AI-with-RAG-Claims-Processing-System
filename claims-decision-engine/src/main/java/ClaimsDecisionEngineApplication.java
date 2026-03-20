@@ -1,5 +1,3 @@
-package com.sunil.claims.decision;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
