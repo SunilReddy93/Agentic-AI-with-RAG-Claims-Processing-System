@@ -18,8 +18,10 @@ public class RagSearchTool {
 
     private final VectorStore vectorStore;
 
-    @Tool(description = "Search for similar past insurance claims based on the claim description. " +
-            "Use this to find fraud patterns and similar cases before making a decision.")
+    @Tool(description = """
+        Search for similar past insurance claims based on the claim description.
+        Use this to find fraud patterns and similar cases before making a decision.
+        """)
     public String searchSimilarClaims(String claimDescription) {
         log.info("RAG Search — searching similar claims for: {}", claimDescription);
 
@@ -45,8 +47,10 @@ public class RagSearchTool {
         return "Similar past claims found:\n" + results;
     }
 
-    @Tool(description = "Search for relevant insurance policy rules and coverage details " +
-            "based on claim type. Use this to verify if the claim is covered.")
+    @Tool(description = """
+        Search for relevant insurance policy rules and coverage details
+        based on claim type. Use this to verify if the claim is covered.
+        """)
     public String searchPolicyRules(String claimType) {
         log.info("RAG Search — searching policy rules for claim type: {}", claimType);
 
@@ -67,8 +71,10 @@ public class RagSearchTool {
                 .collect(Collectors.joining("\n"));
     }
 
-    @Tool(description = "Search for regulatory compliance rules and fraud indicators " +
-            "relevant to the claim. Use this to ensure compliance.")
+    @Tool(description = """
+        Search for regulatory compliance rules and fraud indicators
+        relevant to the claim. Use this to ensure compliance.
+        """)
     public String searchComplianceRules(String claimDescription) {
         log.info("RAG Search — searching compliance rules for: {}", claimDescription);
 

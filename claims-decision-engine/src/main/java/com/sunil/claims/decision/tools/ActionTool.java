@@ -15,8 +15,10 @@ public class ActionTool {
 
     private final ClaimDecisionEventPublisher eventPublisher;
 
-    @Tool(description = "Auto-approve a claim when fraud risk is LOW and all checks pass. " +
-            "Use this when the claim is genuine and within policy coverage.")
+    @Tool(description = """
+        Auto-approve a claim when fraud risk is LOW and all checks pass.
+        Use this when the claim is genuine and within policy coverage.
+        """)
     public String autoApproveClaim(Long claimId, String reasoning) {
         log.info("Action Tool — Auto-approving claim: {}", claimId);
 
@@ -29,8 +31,10 @@ public class ActionTool {
         return "Claim " + claimId + " has been AUTO-APPROVED. Reason: " + reasoning;
     }
 
-    @Tool(description = "Escalate a claim to underwriter when fraud risk is HIGH or " +
-            "claim amount is large. Use this when manual review is needed.")
+    @Tool(description = """
+        Escalate a claim to underwriter when fraud risk is HIGH or
+        claim amount is large. Use this when manual review is needed.
+        """)
     public String escalateToUnderwriter(Long claimId, String reasoning) {
         log.info("Action Tool — Escalating claim: {} to underwriter", claimId);
 
@@ -43,8 +47,10 @@ public class ActionTool {
         return "Claim " + claimId + " has been ESCALATED TO UNDERWRITER. Reason: " + reasoning;
     }
 
-    @Tool(description = "Request more information from the user when claim details " +
-            "are insufficient or suspicious. Use this when details are unclear.")
+    @Tool(description = """
+        Request more information from the user when claim details
+        are insufficient or suspicious. Use this when details are unclear.
+        """)
     public String requestMoreInfo(Long claimId, String missingInfo) {
         log.info("Action Tool — Requesting more info for claim: {}", claimId);
 
@@ -57,8 +63,10 @@ public class ActionTool {
         return "More information requested for claim " + claimId + ". Missing: " + missingInfo;
     }
 
-    @Tool(description = "Generate a detailed fraud report for a claim. " +
-            "Use this for HIGH risk claims to document fraud indicators found.")
+    @Tool(description = """
+        Generate a detailed fraud report for a claim.
+        Use this for HIGH risk claims to document fraud indicators found.
+        """)
     public String generateFraudReport(Long claimId, String fraudIndicators, String similarCases) {
         log.info("Action Tool — Generating fraud report for claim: {}", claimId);
 

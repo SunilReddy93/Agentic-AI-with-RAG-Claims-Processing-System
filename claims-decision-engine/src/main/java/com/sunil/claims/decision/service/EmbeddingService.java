@@ -20,6 +20,15 @@ public class EmbeddingService implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        log.info("Checking if vector store needs seeding...");
+
+        List<Document> existing = vectorStore.similaritySearch("insurance claim");
+
+        if (existing != null && !existing.isEmpty()) {
+            log.info("Vector store already seeded — skipping.");
+            return;
+        }
+
         log.info("Seeding vector store with sample data...");
         seedPastClaims();
         seedPolicyDocuments();

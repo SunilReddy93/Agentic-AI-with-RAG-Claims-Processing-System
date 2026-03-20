@@ -25,13 +25,6 @@ public class ClaimDecisionService {
         log.info("Processing claim decision for claimId: {}", request.getClaimId());
 
         ChatClient chatClient = chatClientBuilder
-                .defaultTools(ragSearchTool, actionTool)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(
-                                MessageWindowChatMemory.builder()
-                                        .chatMemoryRepository(new InMemoryChatMemoryRepository())
-                                        .maxMessages(10)
-                                        .build())
-                        .build())
                 .build();
 
         String agentPrompt = buildAgentPrompt(request);
@@ -40,6 +33,13 @@ public class ClaimDecisionService {
 
         String agentResponse = chatClient.prompt()
                 .user(agentPrompt)
+                .tools(ragSearchTool, actionTool)
+                .advisors(MessageChatMemoryAdvisor.builder(
+                                MessageWindowChatMemory.builder()
+                                        .chatMemoryRepository(new InMemoryChatMemoryRepository())
+                                        .maxMessages(10)
+                                        .build())
+                        .build())
                 .call()
                 .content();
 
