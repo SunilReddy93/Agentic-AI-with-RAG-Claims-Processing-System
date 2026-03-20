@@ -3,27 +3,49 @@ spring.application.name=ai-claims-service
 server.port=8083
 
 # Database
-spring.datasource.url=jdbc:mysql://localhost:3306/claims_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=your_password
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/claims_db}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:password}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
 
 # JWT
-jwt.secret=your_jwt_secret_key
+jwt.secret=${JWT_SECRET:my_key}
+jwt.expiration=86400000
 
 # Redis
-spring.data.redis.host=localhost
-spring.data.redis.port=6379
+spring.data.redis.host=${SPRING_DATA_REDIS_HOST:localhost}
+spring.data.redis.port=${SPRING_DATA_REDIS_PORT:6379}
 
 # Groq AI
-groq.api.key=your_groq_api_key_here
-groq.api.url=https://api.groq.com/openai/v1/chat/completions
-groq.model=llama-3.3-70b-versatile
+groq.api.key=${GROQ_API_KEY:my_key}
+groq.api.url=${GROQ_API_URL:https://api.groq.com/openai/v1/chat/completions}
+groq.model=${GROQ_MODEL:llama-3.3-70b-versatile}
 
 # Kafka
-spring.kafka.bootstrap-servers=localhost:9092
+spring.kafka.bootstrap-servers=${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+# Resilience4j - Circuit Breaker
+resilience4j.circuitbreaker.instances.groq-ai-cb.sliding-window-size=10
+resilience4j.circuitbreaker.instances.groq-ai-cb.failure-rate-threshold=50
+resilience4j.circuitbreaker.instances.groq-ai-cb.wait-duration-in-open-state=10s
+resilience4j.circuitbreaker.instances.groq-ai-cb.permitted-number-of-calls-in-half-open-state=3
+
+# Resilience4j - Time Limiter
+resilience4j.timelimiter.instances.groq-ai-cb.timeout-duration=15s
 
 # User Management Service
-user.management.service.url=http://localhost:8081
+user.management.service.url=${USER_MANAGEMENT_SERVICE_URL:http://localhost:8081}
 
 # Internal API key
-internal.api.key=your_internal_api_key
+internal.api.key=${INTERNAL_API_KEY:my_key}
+
+# Eureka disabled
+eureka.client.enabled=false
