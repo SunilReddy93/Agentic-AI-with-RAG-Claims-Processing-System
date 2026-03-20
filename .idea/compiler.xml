@@ -14,9 +14,10 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
+        <module name="ai-claims-service" />
         <module name="user-management" />
         <module name="notification-service" />
-        <module name="ai-claims-service" />
+        <module name="claims-decision-engine" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -26,6 +27,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ai-claims-service" options="-parameters" />
+      <module name="claims-decision-engine" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="user-management" options="-parameters" />
     </option>
