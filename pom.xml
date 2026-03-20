@@ -16,6 +16,7 @@
         <module>user-management</module>
         <module>ai-claims-service</module>
         <module>notification-service</module>
+        <module>claims-decision-engine</module>
     </modules>
 
     <properties>

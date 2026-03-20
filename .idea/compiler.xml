@@ -19,6 +19,9 @@
         <module name="ai-claims-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Project-Agentic-AI-with-RAG-Claims-Processing-System" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
