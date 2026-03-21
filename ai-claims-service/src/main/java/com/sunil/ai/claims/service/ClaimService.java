@@ -1,5 +1,6 @@
 package com.sunil.ai.claims.service;
 
+import com.sunil.ai.claims.client.ClaimsDecisionEngineClient;
 import com.sunil.ai.claims.client.GroqAiClient;
 import com.sunil.ai.claims.client.UserManagementClient;
 import com.sunil.ai.claims.dto.*;
@@ -36,6 +37,7 @@ public class ClaimService {
     private final UserManagementClient userManagementClient;
     private final GroqAiClient groqAiClient;
     private final ClaimEventProducer claimEventProducer;
+    private final ClaimsDecisionEngineClient claimsDecisionEngineClient;
 
     @Value("${internal.api.key}")
     private String internalApiKey;
@@ -96,6 +98,18 @@ public class ClaimService {
                 .build();
 
         aiFraudAssessmentRepository.save(aiFraudAssessment);
+
+        // Step 7 - Trigger AI agent decision engine asynchronously
+        claimsDecisionEngineClient.triggerDecision(
+                savedClaim.getId(),
+                userId,
+                request.getClaimType().name(),
+                request.getClaimDetail().getIncidentDescription(),
+                request.getClaimDetail().getIncidentLocation(),
+                request.getClaimDetail().getEstimatedAmount().doubleValue(),
+                assessmentResult.getFraudRisk().name(),
+                assessmentResult.getSummary()
+        );
 
         // Step 7 - Save status history
         saveStatusHistory(savedClaim, null, ClaimStatus.SUBMITTED,
