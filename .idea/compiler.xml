@@ -33,6 +33,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="notification-service" />
+        <module name="ai-claims-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

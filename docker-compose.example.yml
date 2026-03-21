@@ -45,12 +45,14 @@ services:
       - claims-network
 
   user-management:
-    image: user-management:latest
+    build:
+      context: ./user-management
+      dockerfile: Dockerfile
     container_name: user-management
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/userdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_management_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
@@ -97,6 +99,44 @@ services:
       kafka:
         condition: service_started
       user-management:
+        condition: service_started
+    networks:
+      - claims-network
+
+  claims-decision-engine:
+    build:
+      context: ./claims-decision-engine
+      dockerfile: Dockerfile
+    container_name: claims-decision-engine
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/claims_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_DATA_REDIS_HOST: redis-claims
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      USER_MANAGEMENT_SERVICE_URL: http://user-management:8081
+      AI_CLAIMS_SERVICE_URL: http://ai-claims-service:8083
+      GROQ_API_KEY: my_key
+      GROQ_API_URL: https://api.groq.com/openai/v1/chat/completions
+      GROQ_MODEL: llama-3.3-70b-versatile
+      JWT_SECRET: your_super_secret_key_which_should_be_at_least_32_characters_long
+      INTERNAL_API_KEY: claims-service-internal-key
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_started
+      user-management:
+        condition: service_started
+      ai-claims-service:
         condition: service_started
     networks:
       - claims-network

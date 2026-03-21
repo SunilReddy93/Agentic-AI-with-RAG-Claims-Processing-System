@@ -1,19 +1,16 @@
-package com.sunil.claims.decision.event;
+package com.sunil.notification.event;
 
-import com.sunil.claims.decision.enums.DecisionType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClaimDecisionEvent {
 
     private Long claimId;
-    private DecisionType decision;
+    private String decision;
     private String reasoning;
     private String decisionSummary;
 }

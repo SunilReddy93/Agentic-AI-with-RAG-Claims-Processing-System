@@ -26,6 +26,7 @@ public class ActionTool {
                 .claimId(claimId)
                 .decision(DecisionType.AUTO_APPROVED)
                 .reasoning(reasoning)
+                .decisionSummary("Your claim has been AUTO-APPROVED")
                 .build());
 
         return "Claim " + claimId + " has been AUTO-APPROVED. Reason: " + reasoning;
@@ -42,6 +43,7 @@ public class ActionTool {
                 .claimId(claimId)
                 .decision(DecisionType.ESCALATED_TO_UNDERWRITER)
                 .reasoning(reasoning)
+                .decisionSummary("Your claim has been ESCALATED TO UNDERWRITER for manual review")
                 .build());
 
         return "Claim " + claimId + " has been ESCALATED TO UNDERWRITER. Reason: " + reasoning;
@@ -58,6 +60,7 @@ public class ActionTool {
                 .claimId(claimId)
                 .decision(DecisionType.REQUEST_MORE_INFO)
                 .reasoning(missingInfo)
+                .decisionSummary("Additional information is required for your claim")
                 .build());
 
         return "More information requested for claim " + claimId + ". Missing: " + missingInfo;
@@ -71,13 +74,20 @@ public class ActionTool {
         log.info("Action Tool — Generating fraud report for claim: {}", claimId);
 
         String report = String.format("""
-                    FRAUD REPORT - Claim ID: %d
-                    Fraud Indicators: %s
-                    Similar Fraud Cases: %s
-                    Recommendation: Escalate for manual review
-                    """,
+            FRAUD REPORT - Claim ID: %d
+            Fraud Indicators: %s
+            Similar Fraud Cases: %s
+            Recommendation: Escalate for manual review
+            """,
                 claimId, fraudIndicators, similarCases
         );
+
+        eventPublisher.publishDecision(ClaimDecisionEvent.builder()
+                .claimId(claimId)
+                .decision(DecisionType.ESCALATED_TO_UNDERWRITER)
+                .reasoning(report)
+                .decisionSummary("A fraud report has been generated for your claim")
+                .build());
 
         log.info("Fraud report generated for claim: {}", claimId);
         return report;
